@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La Porra CBASA</title>
+<style>
+:root{--azul:#0a1d4a;--azul2:#13307a;--rojo:#d4151f;--blanco:#fff;--negro:#000;--gris:#dfe4f0}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:"Segoe UI",Arial,sans-serif;background:var(--azul);color:var(--blanco)}
+.scr{display:none;min-height:100vh;padding:24px 18px 40px;max-width:640px;margin:0 auto;flex-direction:column;justify-content:center}
+.scr.on{display:flex}
+h1,h2{font-family:Impact,Haettenschweiler,"Arial Black","Roboto Condensed","Arial Narrow",sans-serif;letter-spacing:.02em;margin:0 0 14px;line-height:1.05}
+h1{font-size:clamp(3.4rem,17vw,6.4rem);text-transform:uppercase;transform:skewX(-6deg)}
+h1 span{display:block;color:var(--rojo);text-shadow:-2px -2px 0 #fff,2px -2px 0 #fff,-2px 2px 0 #fff,2px 2px 0 #fff,0 -2px 0 #fff,0 2px 0 #fff,-2px 0 0 #fff,2px 0 0 #fff}
+h2{font-size:2rem;text-transform:uppercase}
+.banda{height:10px;background:linear-gradient(90deg,var(--rojo) 70%,var(--blanco) 70% 85%,var(--negro) 85%);margin:0 0 26px;transform:skewX(-20deg)}
+p{line-height:1.5}
+.btn{display:inline-block;border:0;cursor:pointer;font:700 1.05rem "Segoe UI",Arial,sans-serif;padding:14px 26px;margin:6px 8px 6px 0;background:var(--rojo);color:var(--blanco);border-radius:4px;transform:skewX(-6deg)}
+.btn.sec{background:var(--blanco);color:var(--azul)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn:focus-visible,input:focus-visible,.op:focus-within{outline:3px solid var(--blanco);outline-offset:2px}
+input[type=text]{width:100%;font-size:1.3rem;padding:14px;border:3px solid var(--blanco);border-radius:4px;background:var(--azul2);color:var(--blanco);margin:8px 0 12px}
+.msg{min-height:1.4em;font-weight:700}.msg.err{color:#ffb3b8}
+.aviso{background:var(--blanco);color:var(--negro);padding:16px 18px;border-left:8px solid var(--rojo);border-radius:4px;font-size:.95rem}
+.aviso ul{padding-left:18px;margin:8px 0}
+label.chk{display:flex;gap:10px;align-items:flex-start;margin:16px 0;font-weight:600}
+label.chk input{width:22px;height:22px;flex:none}
+.dia{font-family:Impact,"Arial Black",sans-serif;font-size:1.3rem;text-transform:capitalize;margin:22px 0 8px;border-bottom:3px solid var(--rojo);padding-bottom:4px}
+.card{background:var(--blanco);color:var(--negro);border-radius:6px;padding:14px;margin:10px 0}
+.cat{font-size:.85rem;color:var(--azul2);font-weight:700}
+.eq{display:flex;justify-content:space-between;gap:10px;font-weight:800;font-size:1.1rem;margin:8px 0 12px}
+.eq i{color:var(--rojo);font-style:normal}
+.ops{display:flex;gap:8px}
+.op{flex:1;text-align:center;cursor:pointer}
+.op input{position:absolute;opacity:0}
+.op span{display:block;padding:12px 0;border:3px solid var(--azul);border-radius:4px;font:800 1.3rem Impact,"Arial Black",sans-serif;color:var(--azul)}
+.op input:checked+span{background:var(--rojo);border-color:var(--rojo);color:var(--blanco)}
+.star{display:inline-block;width:1.6em;height:1.6em;line-height:1.6em;text-align:center;border-radius:50%;color:#fff;font-size:.85rem;vertical-align:middle}
+.star.pj{background:var(--rojo)}
+.star.sn{background:#2f80ed}
+.logo{width:84px;height:84px;object-fit:contain;background:#fff;border-radius:50%;padding:6px;margin:0 0 14px;align-self:flex-start}
+#s1 .logo{width:130px;height:130px}
+.mar{font:1.4rem Impact,"Arial Black",sans-serif;white-space:nowrap}
+.card.c-ok{background:#e4f5e8}.card.c-ko{background:#fde8e8}
+.ap{font-size:.95rem}.ok{color:#0a7a2f;font-weight:700}.ko{color:var(--rojo);font-weight:700}.pend{color:#a35f00;font-weight:700}
+.total{background:var(--azul2);border-left:8px solid var(--rojo);border-radius:4px;padding:10px 14px;margin:0 0 14px;text-align:center}
+.total small{display:block;font-weight:700;letter-spacing:.04em}
+.total b{display:block;font:4.2rem Impact,"Arial Black",sans-serif;line-height:1.1}
+#s5,#s6{height:100vh;height:100dvh;min-height:0;padding-bottom:12px;overflow:hidden}
+#s5 .scroll,#s6 .scroll{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-right:4px}
+#s5 .logo,#s6 .logo{width:56px;height:56px;margin:0 0 8px}
+[hidden]{display:none!important}
+.cab{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.cab h2{margin:0}.cab .btn{margin:0}
+.leyenda{font-size:.85rem;opacity:.9;margin:0 0 12px}
+.op small{display:block;font:600 .7rem "Segoe UI",Arial,sans-serif}
+.fila{display:flex;align-items:center;gap:12px;background:var(--azul2);border-radius:4px;padding:12px;margin:6px 0}
+.fila b.pos{font:1.6rem Impact,sans-serif;width:2.2rem;text-align:center}
+.fila:nth-child(-n+3) b.pos{color:var(--rojo);text-shadow:1px 1px 0 #fff,-1px -1px 0 #fff,1px -1px 0 #fff,-1px 1px 0 #fff}
+.fila .n{flex:1}.fila .n small{display:block;opacity:.7}
+.fila .pt{font:1.6rem Impact,sans-serif}
+@media(prefers-reduced-motion:no-preference){#s1 h1{animation:e .6s ease-out}@keyframes e{from{transform:translateX(-40px) skewX(-6deg);opacity:0}}}
+</style></head><body>
+
+<section class="scr on" id="s1">
+ <div class="banda"></div>
+ <h1>La Porra <span>CBASA</span></h1>
+ <p>Elige 1, X o 2 en cada partido de este fin de semana y demuestra cuánto sabes de nuestro club.</p>
+ <div><button class="btn" onclick="go('s2')">Continuar</button></div>
+</section>
+
+<section class="scr" id="s2">
+ <h2>Tu código</h2>
+ <p>Escribe tu identificador personal.</p>
+ <input type="text" id="cod" autocomplete="off" aria-label="Identificador" onkeydown="if(event.key==='Enter')validar()">
+ <div class="msg" id="m2"></div>
+ <div><button class="btn" id="bv" onclick="validar()">Validar</button><button class="btn sec" onclick="go('s1')">Volver</button></div>
+</section>
+
+<section class="scr" id="s2b">
+ <h2 id="bien"></h2>
+ <div class="aviso">
+  <b>Antes de jugar</b>
+  <ul>
+   <li>Participar es voluntario y no participar no tiene ninguna consecuencia.</li>
+   <li>La clasificación solo se ve dentro de esta aplicación, no se publica en abierto.</li>
+   <li>En la clasificación aparecerán el nombre y apellidos y los puntos de quien participe.</li>
+   <li>Si el jugador o jugadora es menor, participa con el permiso de su madre, padre o tutor/a.</li>
+   <li>Si no quieres aparecer en la clasificación, escríbenos al club y lo retiramos.</li>
+  </ul>
+ </div>
+ <label class="chk"><input type="checkbox" id="ok" onchange="ctrlAcepta(this.checked)"> He leído y acepto las condiciones de participación.</label>
+ <div><button class="btn" id="bc" hidden onclick="cargar()">Entrar en La Porra</button><button class="btn sec" id="bcl" hidden onclick="clasif()">Ver clasificación</button><button class="btn sec" id="bap" hidden onclick="misApuestas()">Ver mis apuestas enviadas</button><button class="btn sec" id="bsa" hidden onclick="inicio()">Salir</button><button class="btn sec" id="bno" onclick="noAcepto()">No acepto</button></div>
+ <div class="msg" id="m2b"></div>
+ <div id="sal" hidden><button class="btn" onclick="inicio()">Salir de La Porra</button><button class="btn sec" onclick="document.getElementById('sal').hidden=true">No salir</button></div>
+</section>
+
+<section class="scr" id="s3" style="justify-content:flex-start">
+ <h2 id="t3">La Porra de la semana</h2>
+ <p class="leyenda"><span class="star pj">★</span> Partido de la jornada: 3 puntos &nbsp;·&nbsp; <span class="star sn">★</span> Sénior: 2 puntos &nbsp;·&nbsp; Resto: 1 punto</p>
+ <div id="lista"></div>
+ <div class="msg" id="m3"></div>
+ <div id="acc3"></div>
+</section>
+
+<section class="scr" id="s4">
+ <div class="banda"></div>
+ <h2>¡Porra enviada!</h2>
+ <p>Gracias por participar una semana más en nuestra porra.</p>
+ <div><button class="btn" onclick="clasif()">Ver clasificaciones</button><button class="btn sec" onclick="menu()">Volver al menú</button></div>
+</section>
+
+<section class="scr" id="s5" style="justify-content:flex-start">
+ <div class="cab"><h2>Clasificación</h2><button class="btn sec" onclick="menu()">Volver al menú</button></div>
+ <div class="msg" id="m5"></div>
+ <div class="scroll"><div id="clas"></div></div>
+</section>
+
+<section class="scr" id="s6" style="justify-content:flex-start">
+ <div class="cab"><h2>Mis apuestas</h2><button class="btn sec" onclick="go('s2b')">Volver</button></div>
+ <div class="total"><small>PUNTUACIÓN OBTENIDA HASTA AHORA</small><b id="ptot">0</b></div>
+ <p class="leyenda"><span class="star pj">★</span> Partido de la jornada: 3 puntos &nbsp;·&nbsp; <span class="star sn">★</span> Sénior: 2 puntos &nbsp;·&nbsp; Resto: 1 punto</p>
+ <div class="msg" id="m6"></div>
+ <div class="scroll"><div id="mis"></div></div>
+</section>
+
+<script>
+// ===== CONFIGURACIÓN: pega aquí las URLs HTTP de tus flujos de Power Automate =====
+// Si están vacías, la app funciona en MODO PRUEBA con datos de ejemplo.
+const CFG={VALIDAR:"https://defaultbf8cd90772454311a58549f10dc915.b2.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/06/workflows/8c040d8e2fe94c71be9afc8801983754/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ojv6DEqwy7QNdhsKYl8EG1ZY7OGIr2qaa7oIsR0gTLQ",PARTIDOS:"https://defaultbf8cd90772454311a58549f10dc915.b2.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/05/workflows/7c3f9fed29974647b931af9d3b1d97da/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=HkAwRKLVWYtwK17kk6axHdO7jrM4b9w5SJBaGgV4UG8",COMPROBAR:"https://defaultbf8cd90772454311a58549f10dc915.b2.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/24/workflows/410d1b26cdda4a8b97a7a4be0ec2a32f/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=CSXG40oZwRk-M_cgLkYgxOtaZRcXk2yhNhl4zNsH-bk",ENVIAR:"https://defaultbf8cd90772454311a58549f10dc915.b2.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/21/workflows/0de607f10513457eb282d023a3acf6b4/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=EtzPr1tRMZBD__nQWFetVtNaLsjesGBDdu5affmd3KY",CLASIF:"https://defaultbf8cd90772454311a58549f10dc915.b2.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/03/workflows/8f4d87d3423342ac8ffd6a2499967995/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=6K93lu1Y806r3_lrX1Gw9AbxcjSybyRKM9rOqavGhqU",MIS:"https://defaultbf8cd90772454311a58549f10dc915.b2.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/20/workflows/d539978b17254d62b338db5cc0264ab6/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ocQ3BQw500ozmtF6HdPngQmLJbN3HZIxmWgE0u2JBNA"};
+
+const S={};
+const $=id=>document.getElementById(id);
+const esc=t=>String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function go(id){document.querySelectorAll(".scr").forEach(s=>s.classList.remove("on"));$(id).classList.add("on");scrollTo(0,0)}
+function menu(){go("s2b")}
+function ctrlAcepta(v){["bc","bcl","bap"].forEach(i=>$(i).hidden=!v);$("bno").hidden=v;$("bsa").hidden=!v;if(v){$("sal").hidden=true;$("m2b").textContent=""}}
+function inicio(){Object.keys(S).forEach(k=>delete S[k]);$("cod").value="";$("ok").checked=false;$("bc").hidden=true;$("bcl").hidden=true;$("bap").hidden=true;$("bno").hidden=false;$("bsa").hidden=true;$("sal").hidden=true;$("m2b").textContent="";$("m2").textContent="";go("s1")}
+const ymd=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const fday=p=>String(p).slice(0,10);
+const pj=p=>p.P_PJO===true||p.P_PJO==="true";
+const sn=p=>/nior/i.test(String(p.E_Cat||""));
+const marca=p=>pj(p)?'<span class="star pj" role="img" aria-label="Partido de la jornada" title="Partido de la jornada">★</span> ':sn(p)?'<span class="star sn" role="img" aria-label="Partido sénior" title="Partido sénior">★</span> ':"";
+const addDay=(s,n)=>{const d=new Date(s+"T00:00:00");d.setDate(d.getDate()+n);return ymd(d)};
+
+// ===== Llamadas a los flujos (POST + JSON) =====
+async function call(k,body){
+  if(!CFG[k])return mock(k,body);
+  const r=await fetch(CFG[k],{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+  if(!r.ok)throw new Error("HTTP "+r.status);
+  return r.json();
+}
+function mock(k,b){
+  const h=new Date(),f=n=>{const d=new Date(h);d.setDate(d.getDate()+n);return ymd(d)+"T18:00:00"};
+  if(k==="VALIDAR")return{ok:true,J_ID:b.J_ID2,J_NOMB:"Nombre",J_APE1:"Apellido1",J_APE2:"Apellido2"};
+  if(k==="PARTIDOS")return{partidos:[
+   {P_FEC:f(3),E_Sex:"Femenino",E_Cat:"Cadete",E_Div:"1ª División",E_Den:"Cadete A",P_LOC:"BM Apóstol Santiago",P_Vis:"BM Ejemplo",P_PJO:true},
+   {P_FEC:f(4),E_Sex:"Masculino",E_Cat:"Infantil",E_Div:"2ª División",E_Den:"Infantil B",P_LOC:"BM Otro",P_Vis:"BM Apóstol Santiago"}]};
+  if(k==="COMPROBAR")return{yaParticipo:false};
+  if(k==="MIS")return{apuestas:[{P_FEC:f(-3),E_Cat:"Cadete",E_Sex:"Femenino",E_Div:"1ª División",E_Den:"Cadete A",P_LOC:"BM Apóstol Santiago",P_Vis:"BM Ejemplo",Q_Res:"1",P_MLO:24,P_MVI:20,P_PJO:true},{P_FEC:f(-2),E_Cat:"Sénior",E_Sex:"Masculino",E_Div:"Primera",E_Den:"Sénior A",P_LOC:"BM Otro",P_Vis:"BM Apóstol Santiago",Q_Res:"X",P_MLO:0,P_MVI:0}]};
+  if(k==="ENVIAR")return{ok:true};
+  if(k==="CLASIF")return{clasificacion:[{nombre:"Ana Pérez López",tipo:"Jugador/a",aciertos:7},{nombre:"Luis Gómez Ruiz",tipo:"Staff",aciertos:5}]};
+}
+
+// ===== Pantalla 2: validar =====
+async function validar(){
+  const c=$("cod").value.trim(),m=$("m2");m.className="msg";
+  if(!c){m.className="msg err";m.textContent="Escribe tu código.";return}
+  $("bv").disabled=true;m.textContent="Comprobando…";
+  try{
+    const r=await call("VALIDAR",{J_ID2:c});
+    if(r.ok){Object.assign(S,{id2:c,id:r.J_ID});
+      S.nom=[r.J_NOMB,r.J_APE1,r.J_APE2].filter(Boolean).join(" ");
+      $("bien").textContent="¡Bienvenido/a "+S.nom+"!";go("s2b");m.textContent=""}
+    else{m.className="msg err";m.textContent="No encontramos ese código. Revísalo e inténtalo de nuevo."}
+  }catch(e){m.className="msg err";m.textContent="No hemos podido conectar. Inténtalo de nuevo en unos minutos."}
+  $("bv").disabled=false;
+}
+function noAcepto(){
+  $("m2b").className="msg";
+  $("m2b").textContent="Gracias por tu interés en La Porra. Para participar es imprescindible aceptar las condiciones de participación. ¿Quieres salir de La Porra?";$("sal").hidden=false;
+}
+
+// ===== Pantalla 3: partidos del bloque =====
+async function cargar(){
+  go("s3");const L=$("lista"),m=$("m3"),a=$("acc3");L.innerHTML="";a.innerHTML="";m.className="msg";m.textContent="Cargando partidos…";
+  try{
+    const hoy=ymd(new Date());
+    const r=await call("PARTIDOS",{desde:hoy});
+    const todos=(r.partidos||[]).sort((x,y)=>String(x.P_FEC).localeCompare(String(y.P_FEC)));
+    const fechas=[...new Set(todos.map(p=>fday(p.P_FEC)))];
+    const volver='<button class="btn sec" onclick="menu()">Volver al menú</button>';
+    if(fechas.includes(hoy)){m.textContent="Hoy se juegan partidos: la porra está cerrada. Vuelve la semana que viene.";a.innerHTML=volver;return}
+    const fut=fechas.filter(f=>f>hoy);
+    if(!fut.length){m.textContent="No hay partidos disponibles por ahora.";a.innerHTML=volver;return}
+    const bloque=[fut[0]];while(fut.includes(addDay(bloque[bloque.length-1],1)))bloque.push(addDay(bloque[bloque.length-1],1));
+    S.ps=todos.filter(p=>bloque.includes(fday(p.P_FEC)));S.primero=bloque[0];
+    const c=await call("COMPROBAR",{J_ID2:S.id2,fechas:bloque});
+    if(c.yaParticipo){m.textContent="Ya has enviado tu porra para estos partidos. ¡Espera a la semana que viene!";
+      a.innerHTML=volver+'<button class="btn" onclick="clasif()">Ver clasificación</button>';return}
+    const y=new Date(S.primero+"T00:00:00").getFullYear(),mes=new Date(S.primero+"T00:00:00").getMonth();
+    S.tain=mes>=6?y:y-1;
+    let h="",d="";
+    S.ps.forEach((p,i)=>{
+      const f=fday(p.P_FEC);
+      if(f!==d){d=f;h+='<div class="dia">'+new Date(f+"T00:00:00").toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"})+"</div>"}
+      h+='<div class="card"><div class="cat">'+marca(p)+esc([p.E_Sex,p.E_Cat,p.E_Div,p.E_Den].filter(Boolean).join(" · "))+'</div>'+
+      '<div class="eq"><span>'+esc(p.P_LOC)+'</span><i>vs</i><span style="text-align:right">'+esc(p.P_Vis)+'</span></div><div class="ops">'+
+      [["1","Local"],["X","Empate"],["2","Visitante"]].map(o=>'<label class="op"><input type="radio" name="r'+i+'" value="'+o[0]+'"'+(o[0]==="X"?" checked":"")+'><span>'+o[0]+'<small>'+o[1]+'</small></span></label>').join("")+'</div></div>';
+    });
+    L.innerHTML=h;m.textContent="";
+    a.innerHTML='<button class="btn" id="be" onclick="enviar()">Enviar porra</button>';
+  }catch(e){m.className="msg err";m.textContent="No hemos podido cargar los partidos. Inténtalo de nuevo más tarde.";a.innerHTML='<button class="btn sec" onclick="menu()">Volver al menú</button>'}
+}
+
+async function enviar(){
+  const m=$("m3");$("be").disabled=true;m.className="msg";m.textContent="Enviando…";
+  const preds=S.ps.map((p,i)=>({J_ID:S.id,J_ID2:S.id2,T_AIN:S.tain,P_FEC:p.P_FEC,E_Sex:p.E_Sex,E_Cat:p.E_Cat,E_Div:p.E_Div,E_Den:p.E_Den,P_LOC:p.P_LOC,P_Vis:p.P_Vis,P_PJO:pj(p),Q_Res:document.querySelector('input[name="r'+i+'"]:checked').value,Q_ACI:false}));
+  try{
+    const r=await call("ENVIAR",{J_ID:S.id,J_ID2:S.id2,predicciones:preds});
+    if(!r.ok)throw new Error("rechazado");
+    if(confirm("¡Porra enviada! ¿Quieres descargar tus predicciones?"))csv(preds);
+    go("s4");
+  }catch(e){m.className="msg err";m.textContent="No se ha podido enviar la porra. Inténtalo de nuevo.";$("be").disabled=false}
+}
+function csv(preds){
+  const cols=["J_ID","J_ID2","T_AIN","P_FEC","E_Sex","E_Cat","E_Div","E_Den","P_LOC","P_Vis","Q_Res"];
+  const q=v=>'"'+String(v??"").replace(/"/g,'""')+'"';
+  const t="\ufeff"+cols.join(";")+"\n"+preds.map(p=>cols.map(c=>q(p[c])).join(";")).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/csv;charset=utf-8"}));
+  a.download=S.id2+"-"+S.primero+".csv";document.body.appendChild(a);a.click();a.remove();
+}
+
+// ===== Pantalla 5: clasificación =====
+async function clasif(){
+  go("s5");const C=$("clas"),m=$("m5");C.innerHTML="";m.className="msg";m.textContent="Cargando…";
+  try{
+    const r=await call("CLASIF",{});
+    const l=(r.clasificacion||[]).sort((a,b)=>b.aciertos-a.aciertos);
+    m.textContent=l.length?"":"Todavía no hay resultados. ¡Anímate a participar!";
+    C.innerHTML=l.map((x,i)=>'<div class="fila"><b class="pos">'+(i+1)+'</b><div class="n">'+esc(x.nombre)+(x.tipo?'<small>'+esc(x.tipo)+'</small>':'')+'</div><div class="pt">'+esc(x.aciertos)+'</div></div>').join("");
+  }catch(e){m.className="msg err";m.textContent="No hemos podido cargar la clasificación."}
+}
+
+// ===== Pantalla 6: mis apuestas =====
+async function misApuestas(){
+  go("s6");$("ptot").textContent="0";const C=$("mis"),m=$("m6");C.innerHTML="";m.className="msg";m.textContent="Cargando…";
+  try{
+    const r=await call("MIS",{J_ID2:S.id2});
+    const l=(r.apuestas||[]).sort((a,b)=>String(b.P_FEC).localeCompare(String(a.P_FEC)));
+    m.textContent=l.length?"":"Todavía no has enviado ninguna apuesta.";
+    $("ptot").textContent=l.reduce((t,p)=>{const a=+p.P_MLO||0,b=+p.P_MVI||0;if(a===0&&b===0)return t;const real=a>b?"1":a<b?"2":"X";return t+(p.Q_Res===real?(pj(p)?3:sn(p)?2:1):0)},0);
+    C.innerHTML=l.map(p=>{
+      const a=+p.P_MLO||0,b=+p.P_MVI||0,pend=a===0&&b===0,real=a>b?"1":a<b?"2":"X",pts=pj(p)?3:sn(p)?2:1;
+      const est=pend?'<span class="pend">Pendiente de actualizar</span>':p.Q_Res===real?'<span class="ok">✔ Acierto: +'+pts+(pts>1?' puntos':' punto')+'</span>':'<span class="ko">✘ Fallo: 0 puntos</span>';
+      const f=new Date(fday(p.P_FEC)+"T00:00:00").toLocaleDateString("es-ES",{day:"numeric",month:"short",year:"numeric"});
+      const cl=pend?"":p.Q_Res===real?" c-ok":" c-ko";return '<div class="card'+cl+'"><div class="cat">'+marca(p)+esc([f,p.E_Cat,p.E_Sex,p.E_Div,p.E_Den].filter(Boolean).join(" · "))+'</div>'+
+      '<div class="eq"><span>'+esc(p.P_LOC)+'</span><b class="mar">'+a+' - '+b+'</b><span style="text-align:right">'+esc(p.P_Vis)+'</span></div>'+
+      '<div class="ap">Tu apuesta: <b>'+esc(p.Q_Res)+'</b> · '+est+'</div></div>';
+    }).join("");
+  }catch(e){m.className="msg err";m.textContent="No hemos podido cargar tus apuestas."}
+}
+
+// ===== Logo del club en todas las pantallas =====
+const LOGO="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg95S13yXvFY__tARVE85XNWKPX4b9omg2vxA7TgTTtDQvCm7Y2SDlWPpQPVjqgduPguc0odzKXSyU6XihBx9WeZfbI1CsqXksq67-xvhcBCzqciboZwG8ywXlrvFBFWCo-uDvsJMfm19tsiU-RppLnO_GIFKzbIZeelvnLoB8leU8-HmqBlWRL9h-PiZwb/s2406/LOGO%20RETRO_NEGRO.png";
+document.querySelectorAll(".scr").forEach(x=>{const i=new Image();i.src=LOGO;i.className="logo";i.alt="Logo del CBASA";x.prepend(i)});
+</script></body></html>
